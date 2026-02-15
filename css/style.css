@@ -732,41 +732,11 @@ select.form-control {
   box-shadow: 0 0 8px var(--blue-glow), 0 0 20px rgba(37,99,235,0.5);
 }
 
-/* Mobile top logo bar */
-.mobile-logo-bar {
-  display: none;
-}
-
 @media (max-width: 768px) {
   /* Top nav completely hidden on mobile */
   .navbar { display: none !important; }
   /* Bottom nav shown on mobile */
   .mobile-bottom-nav { display: flex !important; }
-  /* Page wrapper: small top padding for logo bar, space at bottom for bottom nav */
+  /* Page wrapper: no top padding (no top nav), space at bottom for bottom nav */
   .page-wrapper { padding-top: 0 !important; padding-bottom: 90px !important; }
-
-  /* Show mobile logo bar */
-  .mobile-logo-bar {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 14px 16px 10px;
-    position: relative;
-    z-index: 10;
-  }
-  .mobile-logo-bar img {
-    height: 32px;
-    width: auto;
-  }
-  .mobile-logo-bar span {
-    font-family: 'Rajdhani', sans-serif;
-    font-weight: 700;
-    font-size: 1.1rem;
-    color: var(--text-primary);
-    letter-spacing: 0.5px;
-  }
-  .mobile-logo-bar span em {
-    color: var(--blue-glow);
-    font-style: normal;
-  }
 }
