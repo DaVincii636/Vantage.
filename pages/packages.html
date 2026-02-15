@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Packages — GymVantage</title>
+  <link rel="stylesheet" href="../css/style.css"/>
+  <style>
+    /* ===== TIER COLOR TOKENS ===== */
+    :root {
+      --bronze-light:   #f4a96a;
+      --bronze-mid:     #cd7f32;
+      --bronze-dark:    #8b4513;
+      --bronze-glow:    rgba(205,127,50,0.35);
+      --bronze-dim:     rgba(205,127,50,0.10);
+
+      --silver-light:   #e8e8e8;
+      --silver-mid:     #a8a9ad;
+      --silver-dark:    #636366;
+      --silver-glow:    rgba(168,169,173,0.35);
+      --silver-dim:     rgba(168,169,173,0.10);
+
+      --gold-light:     #ffe066;
+      --gold-mid:       #ffd700;
+      --gold-dark:      #b8860b;
+      --gold-glow:      rgba(255,215,0,0.35);
+      --gold-dim:       rgba(255,215,0,0.10);
+    }
+
+    /* ===== BILLING TOGGLE ===== */
+    .billing-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 3.5rem;
+    }
+    .toggle-label { color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; transition: var(--transition); }
+    .toggle-label.active { color: var(--text-primary); }
+    .toggle-switch {
+      width: 52px; height: 28px;
+      background: var(--bg-card);
+      border: 1.5px solid var(--border);
+      border-radius: 14px;
+      cursor: pointer;
+      position: relative;
+      transition: var(--transition);
+    }
+    .toggle-switch.yearly { background: var(--blue-dim); border-color: var(--border-hover); }
+    .toggle-knob {
+      width: 22px; height: 22px;
+      background: var(--text-secondary);
+      border-radius: 50%;
+      position: absolute;
+      top: 2px; left: 2px;
+      transition: var(--transition);
+    }
+    .toggle-switch.yearly .toggle-knob { transform: translateX(24px); background: var(--blue-light); box-shadow: var(--shadow-blue); }
+    .save-badge {
+      background: rgba(16,185,129,0.12);
+      color: #34d399;
+      border: 1px solid rgba(16,185,129,0.2);
+      padding: 3px 10px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    /* ===== PACKAGE CARDS ===== */
+    .packages-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      align-items: stretch;
+    }
+    @media (max-width: 900px) { .packages-grid { grid-template-columns: 1fr; max-width: 420px; margin: 0 auto; } }
+
+    .package-card {
+      padding: 2.5rem 2rem;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      border-radius: var(--radius-lg);
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .package-card:hover { transform: translateY(-6px); }
+
+    /* ── BRONZE ── */
+    .package-card.bronze {
+      border-color: var(--bronze-mid);
+      box-shadow: 0 0 30px var(--bronze-glow);
+      background: linear-gradient(160deg, rgba(205,127,50,0.07) 0%, var(--bg-card) 60%);
+    }
+    .package-card.bronze:hover { box-shadow: 0 0 50px var(--bronze-glow); }
+    .package-card.bronze .tier-bar {
+      background: linear-gradient(90deg, var(--bronze-dark), var(--bronze-light), var(--bronze-dark));
+    }
+    .package-card.bronze .pkg-name { color: var(--bronze-light); }
+    .package-card.bronze .price-amount { color: var(--bronze-light); }
+    .package-card.bronze .check { color: var(--bronze-light); }
+    .package-card.bronze .tier-badge { background: linear-gradient(135deg, var(--bronze-dark), var(--bronze-light)); }
+    .package-card.bronze .btn-tier {
+      border-color: var(--bronze-mid);
+      color: var(--bronze-light);
+    }
+    .package-card.bronze .btn-tier:hover {
+      background: var(--bronze-dim);
+      box-shadow: 0 0 16px var(--bronze-glow);
+    }
+    .package-card.bronze .medal { filter: drop-shadow(0 0 10px var(--bronze-glow)); }
+
+    /* ── SILVER (featured / center) ── */
+    .package-card.silver {
+      border-color: var(--silver-mid);
+      box-shadow: 0 0 40px var(--silver-glow);
+      background: linear-gradient(160deg, rgba(168,169,173,0.09) 0%, var(--bg-card) 60%);
+      transform: scale(1.03);
+    }
+    .package-card.silver:hover { transform: scale(1.03) translateY(-6px); box-shadow: 0 0 60px var(--silver-glow); }
+    .package-card.silver .tier-bar {
+      background: linear-gradient(90deg, var(--silver-dark), var(--silver-light), var(--silver-dark));
+    }
+    .package-card.silver .pkg-name { color: var(--silver-light); }
+    .package-card.silver .price-amount { color: var(--silver-light); }
+    .package-card.silver .check { color: var(--silver-light); }
+    .package-card.silver .tier-badge { background: linear-gradient(135deg, var(--silver-dark), var(--silver-light)); }
+    .package-card.silver .btn-tier {
+      background: linear-gradient(135deg, var(--silver-dark), var(--silver-mid));
+      border-color: var(--silver-light);
+      color: #fff;
+    }
+    .package-card.silver .btn-tier:hover {
+      box-shadow: 0 0 20px var(--silver-glow);
+      opacity: 0.9;
+    }
+    .package-card.silver .medal { filter: drop-shadow(0 0 10px var(--silver-glow)); }
+
+    /* ── GOLD ── */
+    .package-card.gold {
+      border-color: var(--gold-mid);
+      box-shadow: 0 0 40px var(--gold-glow);
+      background: linear-gradient(160deg, rgba(255,215,0,0.07) 0%, var(--bg-card) 60%);
+    }
+    .package-card.gold:hover { box-shadow: 0 0 60px var(--gold-glow); }
+    .package-card.gold .tier-bar {
+      background: linear-gradient(90deg, var(--gold-dark), var(--gold-light), var(--gold-dark));
+    }
+    .package-card.gold .pkg-name { color: var(--gold-light); }
+    .package-card.gold .price-amount { color: var(--gold-light); }
+    .package-card.gold .check { color: var(--gold-light); }
+    .package-card.gold .tier-badge { background: linear-gradient(135deg, var(--gold-dark), var(--gold-light)); }
+    .package-card.gold .btn-tier {
+      background: linear-gradient(135deg, var(--gold-dark), var(--gold-mid));
+      border-color: var(--gold-light);
+      color: #000;
+      font-weight: 700;
+    }
+    .package-card.gold .btn-tier:hover {
+      box-shadow: 0 0 24px var(--gold-glow);
+      opacity: 0.9;
+    }
+    .package-card.gold .medal { filter: drop-shadow(0 0 12px var(--gold-glow)); }
+
+    /* ===== CARD INNER ELEMENTS ===== */
+    .tier-bar {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    }
+
+    .tier-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 14px;
+      border-radius: 20px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: #fff;
+      margin-bottom: 1.2rem;
+      width: fit-content;
+    }
+
+    .medal { font-size: 2.8rem; margin-bottom: 0.8rem; display: block; transition: transform 0.3s ease; }
+    .package-card:hover .medal { transform: scale(1.15) rotate(-5deg); }
+
+    .pkg-name { font-size: 1.6rem; margin-bottom: 0.3rem; font-family: 'Rajdhani', sans-serif; letter-spacing: 1px; }
+    .pkg-tagline { color: var(--text-secondary); font-size: 0.88rem; margin-bottom: 1.5rem; }
+
+    .pkg-price { margin-bottom: 1.75rem; }
+    .price-amount {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 3rem;
+      font-weight: 700;
+      line-height: 1;
+      transition: opacity 0.2s;
+    }
+    .price-currency { font-size: 1.2rem; vertical-align: super; color: var(--text-secondary); }
+    .price-period { color: var(--text-muted); font-size: 0.85rem; margin-top: 4px; }
+
+    .pkg-features { list-style: none; margin-bottom: 2rem; flex: 1; padding: 0; }
+    .pkg-features li {
+      display: flex; align-items: center; gap: 10px;
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+    .pkg-features li:last-child { border-bottom: none; }
+    .check { font-weight: 700; }
+    .cross { color: var(--text-muted); }
+    .pkg-features li.disabled { opacity: 0.38; }
+
+    /* Tier CTA button */
+    .btn-tier {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 20px;
+      border-radius: var(--radius);
+      border: 1.5px solid;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.25s ease;
+      letter-spacing: 0.5px;
+    }
+
+    /* ===== COMPARE TABLE ===== */
+    .compare-table {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      margin-top: 4rem;
+    }
+    .compare-table table { width: 100%; border-collapse: collapse; }
+    .compare-table th, .compare-table td {
+      padding: 1rem 1.5rem;
+      text-align: center;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.9rem;
+    }
+    .compare-table th {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      background: var(--bg-secondary);
+    }
+    .compare-table th.bronze-col { color: var(--bronze-light); }
+    .compare-table th.silver-col { color: var(--silver-light); }
+    .compare-table th.gold-col   { color: var(--gold-light); }
+    .compare-table td:first-child { text-align: left; color: var(--text-secondary); }
+    .compare-table tr:last-child td { border-bottom: none; }
+    .compare-table tr:hover td { background: rgba(255,255,255,0.02); }
+
+    /* tick colors per column */
+    .bronze-tick { color: var(--bronze-light); font-weight: 700; }
+    .silver-tick { color: var(--silver-light); font-weight: 700; }
+    .gold-tick   { color: var(--gold-light);   font-weight: 700; }
+
+    /* ===== TIER LEGEND ===== */
+    .tier-legend {
+      display: flex;
+      justify-content: center;
+      gap: 2.5rem;
+      margin-bottom: 2.5rem;
+      flex-wrap: wrap;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+    .legend-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+    }
+    .legend-dot.bronze { background: var(--bronze-light); box-shadow: 0 0 6px var(--bronze-glow); }
+    .legend-dot.silver { background: var(--silver-light); box-shadow: 0 0 6px var(--silver-glow); }
+    .legend-dot.gold   { background: var(--gold-light);   box-shadow: 0 0 6px var(--gold-glow); }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+    <nav class="navbar">
+    <div class="floating-nav">
+      <a href="../index.html" class="navbar-brand">
+        <img src="../Images/GVantage.png" alt="GymVantage Logo" style="height:36px;">
+        <span style="font-family:Rajdhani,sans-serif;font-weight:700;font-size:1.05rem;margin-left:6px;">Gym<span style="color:var(--blue-glow)">Vantage</span></span>
+      </a>
+      <ul class="navbar-nav">
+        <li><a href="../index.html" class="nav-link"><svg viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg>Home</a></li>
+        <li><a href="instructors.html" class="nav-link"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>Instructors</a></li>
+        <li><a href="packages.html" class="nav-link active"><span class="cone"></span><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg>Packages</a></li>
+        <li><a href="workout-plan.html" class="nav-link"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>Workout Plan</a></li>
+        <li><a href="payment.html" class="nav-link"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>Payment</a></li>
+      </ul>
+      <div class="nav-right">
+        <a href="login.html" class="btn btn-outline" style="padding:7px 16px;font-size:0.82rem;">Log In</a>
+      </div>
+    </div>
+  </nav>
+  <!-- Mobile Bottom Nav -->
+  <nav class="mobile-bottom-nav">
+    <a href="../index.html" class="mob-nav-item"><svg viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg>Home</a>
+    <a href="instructors.html" class="mob-nav-item"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>Coaches</a>
+    <a href="packages.html" class="mob-nav-item active"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg>Packages</a>
+    <a href="workout-plan.html" class="mob-nav-item"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>Workout</a>
+    <a href="payment.html" class="mob-nav-item"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>Payment</a>
+  </nav>
+
+  <div class="page-wrapper">
+    <section class="section">
+
+      <div class="section-header">
+        <div class="section-tag">Membership Plans</div>
+        <h2 class="section-title">Gym <span>Packages</span></h2>
+        <p class="section-subtitle">Three tiers of excellence. Choose the rank that matches your ambition.</p>
+      </div>
+
+      <!-- Tier Legend -->
+      <div class="tier-legend">
+        <div class="legend-item"><div class="legend-dot bronze"></div> Bronze — Entry Level</div>
+        <div class="legend-item"><div class="legend-dot silver"></div> Silver — Most Popular</div>
+        <div class="legend-item"><div class="legend-dot gold"></div> Gold — Elite VIP</div>
+      </div>
+
+      <!-- Billing Toggle -->
+      <div class="billing-toggle">
+        <span class="toggle-label active" id="monthlyLabel">Monthly</span>
+        <div class="toggle-switch" id="billingToggle" onclick="toggleBilling()">
+          <div class="toggle-knob"></div>
+        </div>
+        <span class="toggle-label" id="yearlyLabel">Yearly</span>
+        <span class="save-badge">Save 20%</span>
+      </div>
+
+      <!-- Package Cards -->
+      <div class="packages-grid">
+
+        <!-- BRONZE -->
+        <div class="card package-card bronze">
+          <div class="tier-bar"></div>
+          <div class="tier-badge">🥉 Bronze Tier</div>
+          <span class="medal">🥉</span>
+          <h3 class="pkg-name">Starter</h3>
+          <p class="pkg-tagline">Perfect for beginners stepping into their fitness journey</p>
+          <div class="pkg-price">
+            <div><span class="price-currency">₱</span><span class="price-amount" data-monthly="599" data-yearly="479">599</span></div>
+            <div class="price-period">per month</div>
+          </div>
+          <ul class="pkg-features">
+            <li><span class="check">✓</span> Gym Access (Weekdays)</li>
+            <li><span class="check">✓</span> 2 Group Classes / Month</li>
+            <li><span class="check">✓</span> Locker & Shower Access</li>
+            <li><span class="check">✓</span> Fitness Assessment</li>
+            <li class="disabled"><span class="cross">✕</span> Personal Trainer Sessions</li>
+            <li class="disabled"><span class="cross">✕</span> Nutrition Consultation</li>
+            <li class="disabled"><span class="cross">✕</span> Priority Class Booking</li>
+          </ul>
+          <a href="payment.html?plan=starter" class="btn-tier">Choose Bronze →</a>
+        </div>
+
+        <!-- SILVER -->
+        <div class="card package-card silver">
+          <div class="tier-bar"></div>
+          <div class="tier-badge">🥈 Silver Tier · Most Popular</div>
+          <span class="medal">🥈</span>
+          <h3 class="pkg-name">Pro</h3>
+          <p class="pkg-tagline">For the serious athlete ready to level up</p>
+          <div class="pkg-price">
+            <div><span class="price-currency">₱</span><span class="price-amount" data-monthly="1299" data-yearly="1039">1,299</span></div>
+            <div class="price-period">per month</div>
+          </div>
+          <ul class="pkg-features">
+            <li><span class="check">✓</span> Unlimited Gym Access</li>
+            <li><span class="check">✓</span> Unlimited Group Classes</li>
+            <li><span class="check">✓</span> Locker & Shower Access</li>
+            <li><span class="check">✓</span> Fitness Assessment</li>
+            <li><span class="check">✓</span> 4 Personal Trainer Sessions</li>
+            <li><span class="check">✓</span> Nutrition Consultation</li>
+            <li class="disabled"><span class="cross">✕</span> Priority Class Booking</li>
+          </ul>
+          <a href="payment.html?plan=pro" class="btn-tier">Choose Silver →</a>
+        </div>
+
+        <!-- GOLD -->
+        <div class="card package-card gold">
+          <div class="tier-bar"></div>
+          <div class="tier-badge">🥇 Gold Tier</div>
+          <span class="medal">🥇</span>
+          <h3 class="pkg-name">Elite</h3>
+          <p class="pkg-tagline">The full VIP experience — unlimited, unrestricted, unmatched</p>
+          <div class="pkg-price">
+            <div><span class="price-currency">₱</span><span class="price-amount" data-monthly="2499" data-yearly="1999">2,499</span></div>
+            <div class="price-period">per month</div>
+          </div>
+          <ul class="pkg-features">
+            <li><span class="check">✓</span> 24/7 Unlimited Gym Access</li>
+            <li><span class="check">✓</span> Unlimited Group Classes</li>
+            <li><span class="check">✓</span> Private Locker (Permanent)</li>
+            <li><span class="check">✓</span> Monthly Fitness Assessment</li>
+            <li><span class="check">✓</span> Unlimited Personal Trainer</li>
+            <li><span class="check">✓</span> Full Nutrition Program</li>
+            <li><span class="check">✓</span> Priority Class Booking</li>
+          </ul>
+          <a href="payment.html?plan=elite" class="btn-tier">Choose Gold →</a>
+        </div>
+
+      </div>
+
+      <!-- Compare Table -->
+      <div class="compare-table">
+        <table>
+          <thead>
+            <tr>
+              <th style="text-align:left;">Features</th>
+              <th class="bronze-col">🥉 Bronze</th>
+              <th class="silver-col">🥈 Silver</th>
+              <th class="gold-col">🥇 Gold</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Gym Access</td>
+              <td>Weekdays</td>
+              <td>Unlimited</td>
+              <td>24/7</td>
+            </tr>
+            <tr>
+              <td>Group Classes</td>
+              <td>2 / month</td>
+              <td>Unlimited</td>
+              <td>Unlimited</td>
+            </tr>
+            <tr>
+              <td>Personal Trainer</td>
+              <td><span class="cross">✕</span></td>
+              <td>4 sessions</td>
+              <td>Unlimited</td>
+            </tr>
+            <tr>
+              <td>Nutrition Plan</td>
+              <td><span class="cross">✕</span></td>
+              <td>1 consultation</td>
+              <td>Full Program</td>
+            </tr>
+            <tr>
+              <td>Locker Access</td>
+              <td><span class="bronze-tick">✓</span></td>
+              <td><span class="silver-tick">✓</span></td>
+              <td>Private Locker</td>
+            </tr>
+            <tr>
+              <td>Priority Booking</td>
+              <td><span class="cross">✕</span></td>
+              <td><span class="cross">✕</span></td>
+              <td><span class="gold-tick">✓</span></td>
+            </tr>
+            <tr>
+              <td>Guest Pass</td>
+              <td><span class="cross">✕</span></td>
+              <td>2 / month</td>
+              <td>Unlimited</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </section>
+  </div>
+
+  <script src="../js/main.js"></script>
+  <script>
+    let isYearly = false;
+    function toggleBilling() {
+      isYearly = !isYearly;
+      const toggle = document.getElementById('billingToggle');
+      const ml = document.getElementById('monthlyLabel');
+      const yl = document.getElementById('yearlyLabel');
+      toggle.classList.toggle('yearly', isYearly);
+      ml.classList.toggle('active', !isYearly);
+      yl.classList.toggle('active', isYearly);
+      document.querySelectorAll('.price-amount').forEach(el => {
+        const val = isYearly ? el.dataset.yearly : el.dataset.monthly;
+        el.style.opacity = '0';
+        setTimeout(() => {
+          el.textContent = parseInt(val).toLocaleString();
+          el.style.opacity = '1';
+        }, 200);
+      });
+    }
+  </script>
+</body>
+</html>

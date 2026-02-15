@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>GymShape — Fitness & Workout</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* ===== HERO ===== */
+    .hero {
+      min-height: calc(100vh - 68px);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      gap: 4rem;
+      padding: 5rem 4rem 3rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -100px; right: -100px;
+      width: 700px; height: 700px;
+      background: radial-gradient(circle, rgba(37,99,235,0.1) 0%, transparent 65%);
+      pointer-events: none;
+    }
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--blue-dim);
+      border: 1px solid var(--border);
+      color: var(--blue-glow);
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-bottom: 1.5rem;
+    }
+    .hero-tag span { width:8px; height:8px; background:var(--blue-light); border-radius:50%; animation: glowPulse 2s ease infinite; }
+    .hero-title {
+      font-size: 3.8rem;
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+    }
+    .hero-title .line2 { color: var(--blue-light); }
+    .hero-subtitle {
+      color: var(--text-secondary);
+      font-size: 1rem;
+      line-height: 1.8;
+      margin-bottom: 2.5rem;
+      max-width: 440px;
+    }
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+    .play-btn {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--text-secondary);
+      font-weight: 500;
+      font-size: 0.9rem;
+      transition: var(--transition);
+      cursor: pointer;
+    }
+    .play-btn:hover { color: var(--blue-glow); }
+    .play-icon {
+      width: 44px; height: 44px;
+      border: 1.5px solid var(--border-hover);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      transition: var(--transition);
+      font-size: 0.9rem;
+    }
+    .play-btn:hover .play-icon {
+      background: var(--blue-dim);
+      border-color: var(--blue-glow);
+      box-shadow: var(--shadow-blue);
+    }
+    .hero-visual {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 520px;
+    }
+    .hero-bg-circle {
+      width: 420px; height: 420px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, rgba(37,99,235,0.12) 0%, rgba(37,99,235,0.04) 100%);
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      position: relative;
+      animation: float 6s ease-in-out infinite;
+    }
+   .hero-inner-circle {
+      width: 300px; height: 300px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--bg-card), var(--bg-secondary));
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 7rem;
+      box-shadow: var(--shadow-blue);
+    }
+    .hero-float-badge {
+      position: absolute;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 12px 18px;
+      box-shadow: var(--shadow-blue);
+      display: flex; align-items: center; gap: 10px;
+      backdrop-filter: blur(8px);
+      animation: float 4s ease-in-out infinite;
+    }
+    .hero-float-badge.b1 { top: 60px; left: 10px; animation-delay: 0s; }
+    .hero-float-badge.b2 { bottom: 80px; right: 0px; animation-delay: 1.5s; }
+    .badge-icon { font-size: 1.4rem; }
+    .badge-text-sm { font-size: 0.75rem; color: var(--text-secondary); }
+    .badge-text-lg { font-size: 1rem; font-weight: 700; color: var(--blue-light); font-family: 'Rajdhani', sans-serif; }
+    /* ===== PARTNERS ===== */
+    .partners {
+      padding: 2rem 4rem;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .partners-label {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--text-muted);
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+    .partners-row {
+      display: flex;
+      justify-content: center;
+      gap: 3rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .partner-item {
+      color: var(--text-muted);
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      transition: var(--transition);
+      cursor: default;
+    }
+    .partner-item:hover { color: var(--blue-light); }
+    /* ===== FEATURES ===== */
+    .feature-card {
+      padding: 2rem;
+      text-align: center;
+    }
+    .feature-icon {
+      width: 64px; height: 64px;
+      background: var(--blue-dim);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.8rem;
+      margin: 0 auto 1.2rem;
+      transition: var(--transition);
+    }
+    .feature-card:hover .feature-icon {
+      background: linear-gradient(135deg, var(--blue-accent), var(--blue-light));
+      box-shadow: var(--shadow-blue);
+      transform: scale(1.1) rotate(-5deg);
+    }
+    .feature-title {
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
+    }
+    .feature-desc {
+      color: var(--text-secondary);
+      font-size: 0.88rem;
+      line-height: 1.7;
+    }
+    /* ===== WORKOUT CLASSES ===== */
+    .class-card {
+      position: relative;
+      overflow: hidden;
+    }
+    .class-emoji {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      display: block;
+      transition: var(--transition);
+    }
+    .class-card:hover .class-emoji { transform: scale(1.15); }
+    .class-title { font-size: 1.3rem; margin-bottom: 0.4rem; }
+    .class-meta { color: var(--text-muted); font-size: 0.82rem; text-transform: uppercase; letter-spacing: 1px; }
+    /* ===== CTA ===== */
+    .cta-section {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 4rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .cta-section::before {
+      content: '';
+      position: absolute;
+      top: -100px; left: 50%; transform: translateX(-50%);
+      width: 500px; height: 300px;
+      background: radial-gradient(ellipse, rgba(37,99,235,0.15) 0%, transparent 70%);
+    }
+    .cta-title { font-size: 2.5rem; margin-bottom: 1rem; }
+    .cta-subtitle { color: var(--text-secondary); margin-bottom: 2rem; }
+    /* ===== FOOTER ===== */
+    footer {
+      background: var(--bg-secondary);
+      border-top: 1px solid var(--border);
+      padding: 2rem 4rem;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+    footer span { color: var(--blue-light); }
+  </style>
+</head>
+<body>
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <div class="floating-nav">
+      <a href="index.html" class="navbar-brand">
+        <img src="Images/GVantage.png" alt="GymVantage Logo" style="height:36px;">
+        <span style="font-family:Rajdhani,sans-serif;font-weight:700;font-size:1.05rem;margin-left:6px;">Gym<span style="color:var(--blue-glow)">Vantage</span></span>
+      </a>
+      <ul class="navbar-nav">
+        <li><a href="index.html" class="nav-link active"><span class="cone"></span><svg viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg>Home</a></li>
+        <li><a href="pages/instructors.html" class="nav-link"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>Instructors</a></li>
+        <li><a href="pages/packages.html" class="nav-link"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg>Packages</a></li>
+        <li><a href="pages/workout-plan.html" class="nav-link"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>Workout Plan</a></li>
+        <li><a href="pages/payment.html" class="nav-link"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>Payment</a></li>
+      </ul>
+      <div class="nav-right">
+        <a href="pages/login.html" class="btn btn-outline" style="padding:7px 16px;font-size:0.82rem;">Log In</a>
+      </div>
+    </div>
+  </nav>
+  <!-- Mobile Bottom Nav -->
+  <nav class="mobile-bottom-nav">
+    <a href="index.html" class="mob-nav-item active"><svg viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg>Home</a>
+    <a href="pages/instructors.html" class="mob-nav-item"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>Coaches</a>
+    <a href="pages/packages.html" class="mob-nav-item"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg>Packages</a>
+    <a href="pages/workout-plan.html" class="mob-nav-item"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>Workout</a>
+    <a href="pages/payment.html" class="mob-nav-item"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>Payment</a>
+  </nav>
+
+  <div class="page-wrapper">
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-content">
+        <div class="hero-tag"><span></span> No. 1 Fitness Platform</div>
+        <h1 class="hero-title animate-fade-up">
+          We Stay Fit<br/>
+          <span class="line2">With Our Best Coach</span>
+        </h1>
+        <p class="hero-subtitle animate-fade-up animate-delay-1">
+          Whether your aim is to lose weight, tone up, or gain strength — we'll put together the perfect gym programme and connect you with top coaches.
+        </p>
+        <div class="hero-actions animate-fade-up animate-delay-2">
+          <a href="pages/register.html" class="btn btn-primary">Get Started →</a>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="hero-bg-circle">
+      <div class="hero-inner-circle">
+  <img src="Images/GVantage.png" alt="Vantage Logo" style="height:330px; width:330px; object-fit:contain;">
+</div>
+        </div>
+        <div class="hero-float-badge b1">
+          <div class="badge-icon">🔥</div>
+          <div>
+            <div class="badge-text-lg">850+</div>
+            <div class="badge-text-sm">Active Members</div>
+          </div>
+        </div>
+        <div class="hero-float-badge b2">
+          <div class="badge-icon">⭐</div>
+          <div>
+            <div class="badge-text-lg">Best Leg Workout</div>
+            <div class="badge-text-sm">Today at 6:00 PM</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PARTNERS -->
+    <div class="partners">
+      <div class="partners-label">Our Trusted Partners</div>
+      <div class="partners-row">
+        <span class="partner-item">⚡ emajine</span>
+        <span class="partner-item">✦ GlowUP</span>
+        <span class="partner-item">◈ manthul</span>
+        <span class="partner-item">▲ CoreFit</span>
+        <span class="partner-item">◉ PeakPro</span>
+      </div>
+    </div>
+
+    <!-- FEATURES -->
+    <section class="section">
+      <div class="section-header">
+        <div class="section-tag">Why Choose Us</div>
+        <h2 class="section-title">Everything You Need to <span>Get Fit</span></h2>
+        <p class="section-subtitle">World-class coaching, flexible scheduling, and a community that drives you forward.</p>
+      </div>
+      <div class="grid-4">
+        <div class="card feature-card">
+          <div class="feature-icon">🏆</div>
+          <h4 class="feature-title">Expert Coaches</h4>
+          <p class="feature-desc">Certified professionals with 10+ years of experience in fitness and nutrition.</p>
+        </div>
+        <div class="card feature-card">
+          <div class="feature-icon">📅</div>
+          <h4 class="feature-title">Flexible Schedule</h4>
+          <p class="feature-desc">Book sessions 24/7 and train at your own pace with personalized plans.</p>
+        </div>
+        <div class="card feature-card">
+          <div class="feature-icon">💊</div>
+          <h4 class="feature-title">Nutrition Plans</h4>
+          <p class="feature-desc">Custom meal plans designed to complement your specific workout goals.</p>
+        </div>
+        <div class="card feature-card">
+          <div class="feature-icon">📊</div>
+          <h4 class="feature-title">Track Progress</h4>
+          <p class="feature-desc">Monitor your growth with detailed analytics and weekly reports.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CLASSES -->
+    <section class="section" style="padding-top:0;">
+      <div class="section-header">
+        <div class="section-tag">Programs</div>
+        <h2 class="section-title">Popular <span>Workout Classes</span></h2>
+      </div>
+      <div class="grid-3">
+        <div class="card class-card">
+          <span class="class-emoji">🥊</span>
+          <h4 class="class-title">Boxing Cardio</h4>
+          <p class="class-meta">60 min · High Intensity · Mon & Wed</p>
+          <div class="divider"></div>
+          <a href="pages/workout-plan.html" class="btn btn-outline" style="padding:8px 18px;font-size:0.85rem;">View Plan</a>
+        </div>
+        <div class="card class-card">
+          <span class="class-emoji">🧘</span>
+          <h4 class="class-title">Yoga & Stretch</h4>
+          <p class="class-meta">45 min · Low Intensity · Tue & Thu</p>
+          <div class="divider"></div>
+          <a href="pages/workout-plan.html" class="btn btn-outline" style="padding:8px 18px;font-size:0.85rem;">View Plan</a>
+        </div>
+        <div class="card class-card">
+          <span class="class-emoji">🏃</span>
+          <h4 class="class-title">HIIT Training</h4>
+          <p class="class-meta">30 min · Max Intensity · Daily</p>
+          <div class="divider"></div>
+          <a href="pages/workout-plan.html" class="btn btn-outline" style="padding:8px 18px;font-size:0.85rem;">View Plan</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- STATS -->
+    <section class="section" style="padding-top:0;">
+      <div class="stats-bar" style="justify-content:space-around;text-align:center;">
+        <div class="stat-item">
+          <div class="stat-value" data-counter="1200">0</div>
+          <div class="stat-label">Members</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value" data-counter="48">0</div>
+          <div class="stat-label">Expert Coaches</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value" data-counter="30">0</div>
+          <div class="stat-label">Classes/Week</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value" data-counter="99">0</div>
+          <div class="stat-label">% Satisfaction</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="section" style="padding-top:0;">
+      <div class="cta-section">
+        <div class="section-tag" style="margin-bottom:1rem;">Start Today</div>
+        <h2 class="cta-title">Ready to Transform <span style="color:var(--blue-light)">Your Body?</span></h2>
+        <p class="cta-subtitle">Join thousands of members already hitting their fitness goals.</p>
+        <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
+          <a href="pages/register.html" class="btn btn-primary">Create Account →</a>
+          <a href="pages/packages.html" class="btn btn-outline">View Packages</a>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <p>© 2024 <span>BodyShape</span> Fitness & Workout. All rights reserved.</p>
+    </footer>
+  </div>
+  <!-- FIX: JS path from pages folder -->
+<script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Payment — GymShape</title>
+  <link rel="stylesheet" href="../css/style.css"/>
+  <style>
+    .payment-layout {
+      display: grid;
+      grid-template-columns: 1fr 400px;
+      gap: 2rem;
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 3rem 2rem;
+    }
+    @media (max-width: 768px) { .payment-layout { grid-template-columns: 1fr; } }
+    .payment-form-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+    }
+    .payment-section-title {
+      font-size: 1.1rem;
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .payment-section-title span {
+      width: 28px; height: 28px;
+      background: var(--blue-dim);
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--blue-light);
+    }
+    /* Method Tabs */
+    .method-tabs {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+    .method-tab {
+      padding: 12px;
+      border-radius: var(--radius);
+      border: 1.5px solid var(--border);
+      background: var(--bg-secondary);
+      cursor: pointer;
+      text-align: center;
+      transition: var(--transition);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+    .method-tab:hover {
+      border-color: var(--border-hover);
+      background: var(--blue-dim);
+    }
+    .method-tab.active {
+      border-color: var(--blue-accent);
+      background: var(--blue-dim);
+      box-shadow: var(--shadow-blue);
+    }
+    .method-icon { font-size: 1.4rem; }
+    .method-label { font-size: 0.78rem; color: var(--text-secondary); font-weight: 500; }
+    /* Card Preview */
+    .card-preview {
+      background: linear-gradient(135deg, #1e3a8a, #1d4ed8, #2563eb);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      position: relative;
+      overflow: hidden;
+      box-shadow: var(--shadow-blue-lg);
+    }
+    .card-preview::before {
+      content: '';
+      position: absolute;
+      top: -60px; right: -60px;
+      width: 200px; height: 200px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 50%;
+    }
+    .card-chip { font-size: 1.4rem; margin-bottom: 1rem; }
+    .card-number-display {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 1.3rem;
+      letter-spacing: 4px;
+      color: rgba(255,255,255,0.9);
+      margin-bottom: 1rem;
+    }
+    .card-details-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+    .card-field-label { font-size: 0.65rem; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 1px; }
+    .card-field-value { font-size: 0.9rem; color: rgba(255,255,255,0.9); font-weight: 600; }
+    .card-brand { font-family: 'Rajdhani', sans-serif; font-size: 1.4rem; font-weight: 700; color: rgba(255,255,255,0.9); }
+    /* Order Summary */
+    .order-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      position: sticky;
+      top: 88px;
+    }
+    .order-title {
+      font-size: 1.2rem;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .plan-badge {
+      background: linear-gradient(135deg, var(--blue-accent), var(--blue-light));
+      border-radius: var(--radius);
+      padding: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 1.5rem;
+      box-shadow: var(--shadow-blue);
+    }
+    .plan-badge-icon { font-size: 1.6rem; }
+    .plan-badge-name { font-family: 'Rajdhani', sans-serif; font-size: 1.2rem; font-weight: 700; color: #fff; }
+    .plan-badge-desc { font-size: 0.8rem; color: rgba(255,255,255,0.75); }
+    .order-line {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+    .order-line:last-child { border-bottom: none; }
+    .order-total {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 0 0;
+      margin-top: 0.5rem;
+      border-top: 1px solid var(--border);
+      font-weight: 700;
+      font-size: 1rem;
+    }
+    .total-amount {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 1.6rem;
+      color: var(--blue-light);
+    }
+    .secure-badges {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 1.5rem;
+      justify-content: center;
+    }
+    .secure-badge {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 5px 10px;
+    }
+  </style>
+</head>
+<body>
+  <!-- NAVBAR -->
+     <nav class="navbar">
+    <div class="floating-nav">
+      <a href="../index.html" class="navbar-brand">
+        <img src="../Images/GVantage.png" alt="GymVantage Logo" style="height:36px;">
+        <span style="font-family:Rajdhani,sans-serif;font-weight:700;font-size:1.05rem;margin-left:6px;">Gym<span style="color:var(--blue-glow)">Vantage</span></span>
+      </a>
+      <ul class="navbar-nav">
+        <li><a href="../index.html" class="nav-link"><svg viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg>Home</a></li>
+        <li><a href="instructors.html" class="nav-link"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>Instructors</a></li>
+        <li><a href="packages.html" class="nav-link"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg>Packages</a></li>
+        <li><a href="workout-plan.html" class="nav-link"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>Workout Plan</a></li>
+        <li><a href="payment.html" class="nav-link active"><span class="cone"></span><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>Payment</a></li>
+      </ul>
+      <div class="nav-right">
+        <a href="login.html" class="btn btn-outline" style="padding:7px 16px;font-size:0.82rem;">Log In</a>
+      </div>
+    </div>
+  </nav>
+  <!-- Mobile Bottom Nav -->
+  <nav class="mobile-bottom-nav">
+    <a href="../index.html" class="mob-nav-item"><svg viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg>Home</a>
+    <a href="instructors.html" class="mob-nav-item"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>Coaches</a>
+    <a href="packages.html" class="mob-nav-item"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg>Packages</a>
+    <a href="workout-plan.html" class="mob-nav-item"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>Workout</a>
+    <a href="payment.html" class="mob-nav-item active"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>Payment</a>
+  </nav>
+
+  <div class="page-wrapper">
+    <div style="max-width:1000px;margin:0 auto;padding:3rem 2rem 1rem;">
+      <div class="section-header" style="margin-bottom:1rem;">
+        <div class="section-tag">Secure Checkout</div>
+        <h2 class="section-title">Complete Your <span>Payment</span></h2>
+      </div>
+    </div>
+    <div class="payment-layout">
+      <!-- LEFT: Form -->
+      <div>
+        <div class="payment-form-card">
+          <!-- Step 1: Personal -->
+          <h4 class="payment-section-title"><span>1</span> Billing Information</h4>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+            <div class="form-group"><label class="form-label">First Name</label><input type="text" class="form-control" placeholder="Juan" required/></div>
+            <div class="form-group"><label class="form-label">Last Name</label><input type="text" class="form-control" placeholder="Dela Cruz" required/></div>
+          </div>
+          <div class="form-group"><label class="form-label">Email</label><input type="email" class="form-control" placeholder="you@example.com" required/></div>
+          <div class="form-group"><label class="form-label">Phone</label><input type="tel" class="form-control" placeholder="+63 900 000 0000"/></div>
+
+          <div class="divider"></div>
+
+        <!-- Payment Method -->
+<h4 class="payment-section-title"><span>2</span> Payment Method</h4>
+<div class="method-tabs">
+  <div class="method-tab active" onclick="selectMethod(this,'card')">
+    <div class="method-icon" style="font-size:1.4rem;">💳</div>
+    <div class="method-label">Credit Card</div>
+  </div>
+  
+  <div class="method-tab" onclick="selectMethod(this,'gcash')">
+    <div class="method-icon">
+      <div style="
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      ">
+        <img src="../Images/Gcash.png" alt="GCash" style="
+          max-width: 100%;
+          max-height: 100%;
+          object-fit: contain;
+        ">
+      </div>
+    </div>
+    <div class="method-label">GCash</div>
+  </div>
+
+  <div class="method-tab" onclick="selectMethod(this,'maya')">
+    <div class="method-icon">
+      <div style="
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      ">
+        <img src="../Images/Maya.png" alt="Maya" style="
+          max-width: 100%;
+          max-height: 100%;
+          object-fit: contain;
+        ">
+      </div>
+    </div>
+    <div class="method-label">Maya</div>
+  </div>
+</div>
+
+
+
+          <!-- Card Form -->
+          <div id="cardForm">
+            <div class="card-preview">
+              <div class="card-chip">💳</div>
+              <div class="card-number-display" id="previewNumber">•••• •••• •••• ••••</div>
+              <div class="card-details-row">
+                <div>
+                  <div class="card-field-label">Cardholder</div>
+                  <div class="card-field-value" id="previewName">YOUR NAME</div>
+                </div>
+                <div>
+                  <div class="card-field-label">Expires</div>
+                  <div class="card-field-value" id="previewExpiry">MM/YY</div>
+                </div>
+                <div class="card-brand">VISA</div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Cardholder Name</label>
+              <input type="text" class="form-control" placeholder="Juan Dela Cruz" oninput="document.getElementById('previewName').textContent = this.value.toUpperCase() || 'YOUR NAME'"/>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Card Number</label>
+              <input type="text" class="form-control" placeholder="1234 5678 9012 3456" maxlength="19" oninput="formatCard(this)"/>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+              <div class="form-group">
+                <label class="form-label">Expiry Date</label>
+                <input type="text" class="form-control" placeholder="MM/YY" maxlength="5" oninput="formatExpiry(this)"/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">CVV</label>
+                <input type="text" class="form-control" placeholder="•••" maxlength="3"/>
+              </div>
+            </div>
+          </div>
+
+          <!-- GCash/Maya (hidden) -->
+<div id="ewalletForm" style="display:none;text-align:center;padding:2rem 0;">
+  <div id="ewalletIcon" style="
+    width: 60px;
+    height: 60px;
+    margin: 0 auto 1rem auto;
+  ">
+    <!-- Image will be swapped dynamically -->
+    <img src="../Images/Gcash.png" alt="E-Wallet" style="max-width:100%; max-height:100%; object-fit:contain;">
+  </div>
+  <p id="ewalletText" style="color:var(--text-secondary); font-size:0.9rem; margin-bottom:1.5rem;">
+    Enter your registered e-wallet number.
+  </p>
+  <div class="form-group">
+    <label class="form-label">Mobile Number</label>
+    <input type="tel" class="form-control" placeholder="+63 900 000 0000"/>
+  </div>
+</div>
+
+<!-- Pay Button -->
+<button class="btn btn-primary" style="width:100%; justify-content:center; font-size:1rem; padding:14px; margin-top:0.5rem;" onclick="handlePayment()">
+  🔒 Pay Now
+</button>
+
+        </div>
+      </div>
+
+      <!-- RIGHT: Order Summary -->
+      <div>
+        <div class="order-card">
+          <h4 class="order-title">Order Summary</h4>
+          <div class="plan-badge">
+            <div class="plan-badge-icon" id="planIcon">⚡</div>
+            <div>
+              <div class="plan-badge-name" id="planName">Pro Membership</div>
+              <div class="plan-badge-desc">Monthly billing</div>
+            </div>
+          </div>
+          <div class="order-line"><span>Plan Price</span><span id="planPrice">₱1,299</span></div>
+          <div class="order-line"><span>Processing Fee</span><span>₱0</span></div>
+          <div class="order-line"><span>VAT (12%)</span><span id="planVat">₱155.88</span></div>
+          <div class="order-line"><span>Discount</span><span style="color:#34d399;">—₱0</span></div>
+          <div class="order-total">
+            <span>Total Due</span>
+            <span class="total-amount" id="totalDue">₱1,454.88</span>
+          </div>
+          <div class="secure-badges">
+            <div class="secure-badge">🔒 SSL Secure</div>
+            <div class="secure-badge">✓ PCI Compliant</div>
+          </div>
+          <p style="text-align:center;color:var(--text-muted);font-size:0.78rem;margin-top:1rem;">Cancel anytime. No hidden fees.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/main.js"></script>
+  <script>
+    // Load plan from URL param
+    const params = new URLSearchParams(window.location.search);
+    const plans = {
+      starter: { name: 'Starter Membership', icon: '🌱', price: 599 },
+      pro:     { name: 'Pro Membership',     icon: '⚡', price: 1299 },
+      elite:   { name: 'Elite Membership',   icon: '👑', price: 2499 }
+    };
+    const plan = plans[params.get('plan')] || plans.pro;
+    const vat = plan.price * 0.12;
+    const total = plan.price + vat;
+    document.getElementById('planIcon').textContent = plan.icon;
+    document.getElementById('planName').textContent = plan.name;
+    document.getElementById('planPrice').textContent = '₱' + plan.price.toLocaleString();
+    document.getElementById('planVat').textContent = '₱' + vat.toFixed(2);
+    document.getElementById('totalDue').textContent = '₱' + total.toFixed(2);
+
+    function selectMethod(el, method) {
+      document.querySelectorAll('.method-tab').forEach(t => t.classList.remove('active'));
+      el.classList.add('active');
+      document.getElementById('cardForm').style.display = method === 'card' ? 'block' : 'none';
+      document.getElementById('ewalletForm').style.display = method !== 'card' ? 'block' : 'none';
+    }
+
+    function formatCard(input) {
+      let val = input.value.replace(/\D/g,'').substring(0,16);
+      input.value = val.replace(/(.{4})/g,'$1 ').trim();
+      const display = val.padEnd(16,'•').replace(/(.{4})/g,'$1 ').trim();
+      document.getElementById('previewNumber').textContent = display;
+    }
+
+    function formatExpiry(input) {
+      let val = input.value.replace(/\D/g,'').substring(0,4);
+      if (val.length >= 3) val = val.substring(0,2) + '/' + val.substring(2);
+      input.value = val;
+      document.getElementById('previewExpiry').textContent = val || 'MM/YY';
+    }
+
+    function handlePayment() {
+      showToast('Processing payment...', 'info');
+      setTimeout(() => {
+        showToast('Payment successful! Welcome to GymShape 🎉', 'success');
+        setTimeout(() => { window.location.href = '../index.html'; }, 2500);
+      }, 2000);
+    }
+  </script>
+</body>
+</html>
