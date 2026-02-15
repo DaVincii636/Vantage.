@@ -8,7 +8,7 @@
   <style>
     /* ===== HERO ===== */
     .hero {
-      min-height: calc(100vh - 68px);
+      min-height: calc(100vh - 82px);
       display: grid;
       grid-template-columns: 1fr 1fr;
       align-items: center;
@@ -41,6 +41,16 @@
       margin-bottom: 1.5rem;
     }
     .hero-tag span { width:8px; height:8px; background:var(--blue-light); border-radius:50%; animation: glowPulse 2s ease infinite; }
+    @media (max-width: 768px) {
+      .hero {
+        grid-template-columns: 1fr;
+        padding: 2rem 1.5rem 6rem;
+        min-height: auto;
+        gap: 2rem;
+      }
+      .hero-visual { display: none; }
+      .page-wrapper { padding-top: 16px !important; }
+    }
     .hero-title {
       font-size: 3.8rem;
       line-height: 1.1;
