@@ -59,23 +59,7 @@ a {
    NAVBAR
    =========================== */
 
-.navbar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 1000;
-  background: rgba(10, 12, 20, 0.85);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border-bottom: 1px solid var(--border);
-  padding: 0 2rem;
-  height: 68px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  box-shadow: 0 2px 30px rgba(0, 0, 0, 0.5);
-}
+/* old navbar removed */
 
 .navbar-brand {
   display: flex;
@@ -302,7 +286,7 @@ select.form-control {
 
 .page-wrapper {
   min-height: 100vh;
-  padding-top: 68px;
+  padding-top: 82px;
 }
 
 .section {
@@ -363,8 +347,6 @@ select.form-control {
 
 @media (max-width: 768px) {
   .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
-  .navbar-nav { display: none; }
-  .nav-meta { display: none; }
   .section { padding: 3rem 1rem; }
   .section-title { font-size: 1.8rem; }
 }
@@ -751,7 +733,10 @@ select.form-control {
 }
 
 @media (max-width: 768px) {
-  .navbar { display: none; }
-  .mobile-bottom-nav { display: flex; }
-  .page-wrapper { padding-top: 16px; padding-bottom: 90px; }
+  /* Top nav completely hidden on mobile */
+  .navbar { display: none !important; }
+  /* Bottom nav shown on mobile */
+  .mobile-bottom-nav { display: flex !important; }
+  /* Page wrapper: no top padding (no top nav), space at bottom for bottom nav */
+  .page-wrapper { padding-top: 0 !important; padding-bottom: 90px !important; }
 }
