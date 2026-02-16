@@ -3,191 +3,85 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Workout Plan — GymShape</title>
+  <title>Workout Plan — GymVantage</title>
   <link rel="stylesheet" href="../css/style.css"/>
   <style>
-    .week-nav {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 1rem;
-      margin-bottom: 2.5rem;
-    }
-    .week-btn {
-      width: 40px; height: 40px;
-      border-radius: 10px;
-      border: 1.5px solid var(--border);
-      background: var(--bg-card);
-      color: var(--text-secondary);
-      font-size: 1rem;
-      cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      transition: var(--transition);
-    }
-    .week-btn:hover {
-      border-color: var(--border-hover);
-      background: var(--blue-dim);
-      color: var(--blue-glow);
-    }
-    .week-label {
-      font-family: 'Rajdhani', sans-serif;
-      font-size: 1.2rem;
-      font-weight: 700;
-      color: var(--text-primary);
-      min-width: 180px;
-      text-align: center;
-    }
-    /* Day Tabs */
-    .day-tabs {
-      display: flex;
-      gap: 0.5rem;
-      overflow-x: auto;
-      padding-bottom: 0.5rem;
-      margin-bottom: 2rem;
-      scrollbar-width: none;
-    }
-    .day-tabs::-webkit-scrollbar { display: none; }
-    .day-tab {
-      flex-shrink: 0;
-      padding: 10px 20px;
-      border-radius: 10px;
-      border: 1.5px solid var(--border);
-      background: var(--bg-card);
-      color: var(--text-secondary);
-      font-family: 'Exo 2', sans-serif;
-      font-size: 0.88rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: var(--transition);
-      text-align: center;
-      min-width: 90px;
-    }
-    .day-tab:hover {
-      border-color: var(--border-hover);
-      color: var(--blue-glow);
-      background: var(--blue-dim);
-    }
-    .day-tab.active {
-      background: linear-gradient(135deg, var(--blue-accent), var(--blue-light));
-      border-color: var(--blue-accent);
-      color: #fff;
-      box-shadow: var(--shadow-blue);
-    }
-    .day-tab.rest {
-      border-color: rgba(16,185,129,0.2);
-      color: #34d399;
-    }
-    .day-tab.rest.active {
-      background: linear-gradient(135deg, #059669, #10b981);
-      border-color: #059669;
-    }
-    .day-tab-sub { font-size: 0.7rem; font-weight: 400; opacity: 0.8; margin-top: 2px; }
-    /* Workout Content */
-    .workout-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 1.5rem;
-      flex-wrap: wrap;
-      gap: 1rem;
-    }
-    .workout-day-title {
-      font-size: 2rem;
-    }
-    .workout-meta-row {
-      display: flex;
-      gap: 0.75rem;
-      flex-wrap: wrap;
-    }
-    /* Exercise Card */
-    .exercise-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 1rem;
-    }
-    @media (max-width: 640px) { .exercise-grid { grid-template-columns: 1fr; } }
-    .exercise-card {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      padding: 1.25rem;
-      cursor: pointer;
-    }
-    .exercise-card:hover { transform: translateY(-3px); }
-    .ex-icon {
-      width: 54px; height: 54px;
-      border-radius: 12px;
-      background: var(--blue-dim);
-      border: 1px solid var(--border);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.5rem;
-      flex-shrink: 0;
-      transition: var(--transition);
-    }
-    .exercise-card:hover .ex-icon {
-      background: linear-gradient(135deg, var(--blue-accent), var(--blue-light));
-      box-shadow: var(--shadow-blue);
-    }
-    .ex-info { flex: 1; }
-    .ex-name { font-size: 1rem; font-weight: 600; margin-bottom: 3px; }
-    .ex-detail { color: var(--text-muted); font-size: 0.8rem; }
-    .ex-sets {
-      font-family: 'Rajdhani', sans-serif;
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: var(--blue-light);
-      text-align: right;
-      flex-shrink: 0;
-    }
-    .ex-sets-sub { font-size: 0.7rem; color: var(--text-muted); font-family: 'Exo 2', sans-serif; font-weight: 400; }
-    /* Progress */
-    .progress-bar-wrap {
-      background: var(--bg-secondary);
-      border-radius: 4px;
-      height: 6px;
-      margin-top: 6px;
-      overflow: hidden;
-    }
-    .progress-bar-fill {
-      height: 100%;
-      background: linear-gradient(to right, var(--blue-accent), var(--blue-glow));
-      border-radius: 4px;
-      transition: width 1s ease;
-    }
-    /* Rest Day */
-    .rest-day-card {
-      text-align: center;
-      padding: 4rem 2rem;
-      border: 1px solid rgba(16,185,129,0.2);
-      background: rgba(16,185,129,0.03);
-    }
-    .rest-emoji { font-size: 4rem; margin-bottom: 1rem; }
-    .rest-title { font-size: 2rem; color: #34d399; margin-bottom: 0.5rem; }
-    .rest-text { color: var(--text-secondary); font-size: 0.95rem; line-height: 1.8; }
-    /* Summary stats row */
-    .workout-summary {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 1rem;
-      margin-bottom: 2rem;
-    }
-    .summary-stat {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 1rem;
-      text-align: center;
-      transition: var(--transition);
-    }
-    .summary-stat:hover { border-color: var(--border-hover); box-shadow: var(--shadow-blue); }
-    .summary-val { font-family: 'Rajdhani', sans-serif; font-size: 1.6rem; font-weight: 700; color: var(--blue-light); }
-    .summary-lbl { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; }
-    @media (max-width: 640px) { .workout-summary { grid-template-columns: repeat(2, 1fr); } }
+    .wp-container { max-width: 900px; margin: 0 auto; }
+
+    /* ===== YEAR CALENDAR ===== */
+    .calendar-year { display: grid; grid-template-columns: repeat(4,1fr); gap: 1.25rem; margin-bottom: 2.5rem; }
+    @media(max-width:900px){ .calendar-year{ grid-template-columns:repeat(3,1fr); } }
+    @media(max-width:600px){ .calendar-year{ grid-template-columns:repeat(2,1fr); } }
+
+    .cal-month { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; transition:var(--transition); cursor:pointer; }
+    .cal-month:hover { border-color:var(--border-hover); box-shadow:var(--shadow-blue); }
+    .cal-month.selected { border-color:var(--blue-accent); box-shadow:var(--shadow-blue); }
+    .cal-month-header { background:var(--bg-secondary); padding:8px 10px; text-align:center; font-family:'Rajdhani',sans-serif; font-weight:700; font-size:0.85rem; letter-spacing:1px; color:var(--text-primary); }
+    .cal-month.selected .cal-month-header { background:linear-gradient(135deg,var(--blue-accent),var(--blue-light)); color:#fff; }
+    .cal-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:2px; padding:6px; }
+    .cal-day-label { text-align:center; font-size:0.55rem; font-weight:700; color:var(--text-muted); text-transform:uppercase; padding:3px 0; }
+    .cal-day { text-align:center; font-size:0.65rem; padding:3px 0; border-radius:4px; color:var(--text-secondary); cursor:default; min-width:0; }
+    .cal-day.has-workout { background:rgba(37,99,235,0.15); color:var(--blue-glow); font-weight:600; cursor:pointer; }
+    .cal-day.is-rest { background:rgba(16,185,129,0.10); color:#34d399; font-weight:600; cursor:pointer; }
+    .cal-day.today { background:var(--blue-accent); color:#fff; font-weight:700; border-radius:50%; }
+    .cal-day.empty { opacity:0; pointer-events:none; }
+
+    /* ===== REST DAYS EDITOR ===== */
+    .rest-editor { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg); padding:1.5rem; margin-bottom:2rem; text-align:center; }
+    .rest-editor h4 { font-size:1rem; margin-bottom:0.4rem; color:var(--text-primary); }
+    .rest-editor p { font-size:0.82rem; color:var(--text-secondary); margin-bottom:1.25rem; }
+    .day-toggles { display:flex; justify-content:center; gap:0.5rem; flex-wrap:wrap; }
+    .day-toggle { padding:8px 14px; border-radius:20px; border:1.5px solid var(--border); background:var(--bg-secondary); font-size:0.82rem; font-weight:600; cursor:pointer; transition:var(--transition); color:var(--text-secondary); }
+    .day-toggle:hover { border-color:var(--border-hover); color:var(--text-primary); }
+    .day-toggle.rest-on { background:rgba(16,185,129,0.12); border-color:#059669; color:#34d399; }
+
+    /* ===== WEEKLY VIEW ===== */
+    .weekly-section { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg); overflow:hidden; margin-bottom:2rem; }
+    .weekly-section-header { background:var(--bg-secondary); padding:1rem 1.5rem; display:flex; align-items:center; justify-content:space-between; }
+    .weekly-section-title { font-family:'Rajdhani',sans-serif; font-size:1.1rem; font-weight:700; }
+
+    .day-tabs { display:flex; gap:0.5rem; overflow-x:auto; padding:1rem 1.5rem 0; scrollbar-width:none; }
+    .day-tabs::-webkit-scrollbar{ display:none; }
+    .day-tab { flex-shrink:0; padding:9px 18px; border-radius:10px; border:1.5px solid var(--border); background:var(--bg-secondary); color:var(--text-secondary); font-size:0.85rem; font-weight:600; cursor:pointer; transition:var(--transition); text-align:center; min-width:80px; }
+    .day-tab:hover { border-color:var(--border-hover); color:var(--blue-glow); background:var(--blue-dim); }
+    .day-tab.active { background:linear-gradient(135deg,var(--blue-accent),var(--blue-light)); border-color:var(--blue-accent); color:#fff; box-shadow:var(--shadow-blue); }
+    .day-tab.rest-tab { border-color:rgba(16,185,129,0.25); color:#34d399; }
+    .day-tab.rest-tab.active { background:linear-gradient(135deg,#059669,#10b981); border-color:#059669; }
+    .day-tab-sub { font-size:0.68rem; font-weight:400; opacity:0.8; margin-top:2px; }
+
+    .day-content { padding:1.5rem; }
+
+    /* ===== EXERCISE CARDS ===== */
+    .exercise-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:1rem; }
+    @media(max-width:640px){ .exercise-grid{ grid-template-columns:1fr; } }
+    .exercise-card { display:flex; align-items:center; gap:1rem; padding:1.1rem; cursor:pointer; }
+    .exercise-card:hover { transform:translateY(-3px); }
+    .ex-icon { width:50px; height:50px; border-radius:12px; background:var(--blue-dim); border:1px solid var(--border); display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0; transition:var(--transition); }
+    .exercise-card:hover .ex-icon { background:linear-gradient(135deg,var(--blue-accent),var(--blue-light)); box-shadow:var(--shadow-blue); }
+    .ex-info { flex:1; }
+    .ex-name { font-size:0.95rem; font-weight:600; margin-bottom:2px; }
+    .ex-detail { color:var(--text-muted); font-size:0.78rem; }
+    .progress-bar-wrap { background:var(--bg-secondary); border-radius:4px; height:5px; margin-top:5px; overflow:hidden; }
+    .progress-bar-fill { height:100%; background:linear-gradient(to right,var(--blue-accent),var(--blue-glow)); border-radius:4px; }
+    .ex-sets { font-family:'Rajdhani',sans-serif; font-size:1.1rem; font-weight:700; color:var(--blue-light); text-align:right; flex-shrink:0; }
+    .ex-sets-sub { font-size:0.68rem; color:var(--text-muted); font-family:'Exo 2',sans-serif; font-weight:400; }
+
+    .rest-day-card { text-align:center; padding:3rem 2rem; border:1px solid rgba(16,185,129,0.2); background:rgba(16,185,129,0.03); border-radius:var(--radius-lg); }
+    .rest-emoji { font-size:3.5rem; margin-bottom:0.75rem; }
+    .rest-title { font-size:1.8rem; color:#34d399; margin-bottom:0.4rem; }
+    .rest-text { color:var(--text-secondary); font-size:0.9rem; line-height:1.8; }
+
+    .workout-summary { display:grid; grid-template-columns:repeat(4,1fr); gap:1rem; margin-bottom:2rem; }
+    @media(max-width:640px){ .workout-summary{ grid-template-columns:repeat(2,1fr); } }
+    .summary-stat { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius); padding:1rem; text-align:center; }
+    .summary-val { font-family:'Rajdhani',sans-serif; font-size:1.5rem; font-weight:700; color:var(--blue-light); }
+    .summary-lbl { font-size:0.72rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.5px; margin-top:2px; }
+
+    .selected-month-label { text-align:center; font-family:'Rajdhani',sans-serif; font-size:1.4rem; font-weight:700; color:var(--blue-light); margin-bottom:1.5rem; }
   </style>
 </head>
 <body>
-  <!-- NAVBAR -->
-   <nav class="navbar">
+  <nav class="navbar">
     <div class="floating-nav">
       <a href="../index.html" class="navbar-brand">
         <img src="../Images/GVantage.png" alt="GymVantage Logo" style="height:36px;">
@@ -198,187 +92,227 @@
         <li><a href="instructors.html" class="nav-link"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>Instructors</a></li>
         <li><a href="packages.html" class="nav-link"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg>Packages</a></li>
         <li><a href="workout-plan.html" class="nav-link active"><span class="cone"></span><svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>Workout Plan</a></li>
-        <li><a href="payment.html" class="nav-link"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>Payment</a></li>
       </ul>
       <div class="nav-right">
         <a href="login.html" class="btn btn-outline" style="padding:7px 16px;font-size:0.82rem;">Log In</a>
       </div>
     </div>
   </nav>
-  <!-- Mobile Bottom Nav -->
-  <nav class="mobile-bottom-nav">
-    <a href="../index.html" class="mob-nav-item"><svg viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg>Home</a>
-    <a href="instructors.html" class="mob-nav-item"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>Coaches</a>
-    <a href="packages.html" class="mob-nav-item"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg>Packages</a>
-    <a href="workout-plan.html" class="mob-nav-item active"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>Workout</a>
-    <a href="payment.html" class="mob-nav-item"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>Payment</a>
-  </nav>
-
+  <header class="mobile-header">
+    <a href="../index.html" class="mobile-header-brand">
+      <img src="../Images/GVantage.png" alt="GymVantage Logo" style="height:30px;width:auto;">
+      <span>Gym<em>Vantage</em></span>
+    </a>
+    <a href="login.html" class="mobile-header-login">Log In</a>
+  </header>
 
   <div class="page-wrapper">
     <section class="section">
-      <div class="section-header">
-        <div class="section-tag">Weekly Schedule</div>
-        <h2 class="section-title">Your <span>Workout Plan</span></h2>
-        <p class="section-subtitle">A balanced 7-day program designed to build strength, endurance, and flexibility.</p>
-      </div>
+      <div class="wp-container">
+        <div class="section-header">
+          <div class="section-tag">Training Schedule</div>
+          <h2 class="section-title">Your <span>Workout Plan</span></h2>
+          <p class="section-subtitle">Click any month to view its schedule. Toggle your rest days below.</p>
+        </div>
 
-      <!-- Week Navigator -->
-      <div class="week-nav">
-        <button class="week-btn" onclick="changeWeek(-1)">◀</button>
-        <div class="week-label" id="weekLabel">Week 1 — Feb 2025</div>
-        <button class="week-btn" onclick="changeWeek(1)">▶</button>
-      </div>
+        <!-- Rest Day Editor -->
+        <div class="rest-editor">
+          <h4>🛌 Set Your Rest Days</h4>
+          <p>Toggle the days you want as rest/recovery days each week.</p>
+          <div class="day-toggles" id="dayToggles">
+            <div class="day-toggle" data-day="0" onclick="toggleRestDay(this)">Sun</div>
+            <div class="day-toggle" data-day="1" onclick="toggleRestDay(this)">Mon</div>
+            <div class="day-toggle" data-day="2" onclick="toggleRestDay(this)">Tue</div>
+            <div class="day-toggle" data-day="3" onclick="toggleRestDay(this)">Wed</div>
+            <div class="day-toggle" data-day="4" onclick="toggleRestDay(this)">Thu</div>
+            <div class="day-toggle" data-day="5" onclick="toggleRestDay(this)">Fri</div>
+            <div class="day-toggle rest-on" data-day="6" onclick="toggleRestDay(this)">Sat</div>
+          </div>
+        </div>
 
-      <!-- Summary Stats -->
-      <div class="workout-summary">
-        <div class="summary-stat"><div class="summary-val">5</div><div class="summary-lbl">Training Days</div></div>
-        <div class="summary-stat"><div class="summary-val">28</div><div class="summary-lbl">Exercises</div></div>
-        <div class="summary-stat"><div class="summary-val">~2,400</div><div class="summary-lbl">Kcal Burn</div></div>
-        <div class="summary-stat"><div class="summary-val">6h 30m</div><div class="summary-lbl">Total Time</div></div>
-      </div>
+        <!-- Year Calendar -->
+        <div class="calendar-year" id="yearCalendar"></div>
 
-      <!-- Day Tabs -->
-      <div class="day-tabs">
-        <div class="day-tab active" onclick="switchDay(this, 'monday')">Mon<div class="day-tab-sub">Chest</div></div>
-        <div class="day-tab" onclick="switchDay(this, 'tuesday')">Tue<div class="day-tab-sub">Back</div></div>
-        <div class="day-tab" onclick="switchDay(this, 'wednesday')">Wed<div class="day-tab-sub">Legs</div></div>
-        <div class="day-tab rest" onclick="switchDay(this, 'thursday')">Thu<div class="day-tab-sub">Rest</div></div>
-        <div class="day-tab" onclick="switchDay(this, 'friday')">Fri<div class="day-tab-sub">Shoulders</div></div>
-        <div class="day-tab" onclick="switchDay(this, 'saturday')">Sat<div class="day-tab-sub">HIIT</div></div>
-        <div class="day-tab rest" onclick="switchDay(this, 'sunday')">Sun<div class="day-tab-sub">Rest</div></div>
-      </div>
+        <!-- Weekly Schedule for selected month -->
+        <div id="monthSchedule" style="display:none;">
+          <div class="selected-month-label" id="selectedMonthLabel"></div>
+          <div class="workout-summary">
+            <div class="summary-stat"><div class="summary-val" id="sumDays">5</div><div class="summary-lbl">Training Days</div></div>
+            <div class="summary-stat"><div class="summary-val">28</div><div class="summary-lbl">Exercises</div></div>
+            <div class="summary-stat"><div class="summary-val">~2,400</div><div class="summary-lbl">Kcal / Week</div></div>
+            <div class="summary-stat"><div class="summary-val">6h 30m</div><div class="summary-lbl">Total Time</div></div>
+          </div>
+          <div class="weekly-section">
+            <div class="weekly-section-header">
+              <div class="weekly-section-title">Weekly Schedule</div>
+              <span class="badge badge-blue" id="weekBadge">Week Overview</span>
+            </div>
+            <div class="day-tabs" id="dayTabs"></div>
+            <div class="day-content" id="dayContent"></div>
+          </div>
+        </div>
 
-      <!-- Day Content -->
-      <div id="workoutContent"></div>
+      </div>
     </section>
   </div>
 
   <script src="../js/main.js"></script>
   <script>
-    const workouts = {
-      monday: {
-        title: 'Monday — Chest & Triceps',
-        type: '💪 Strength',
-        duration: '60 min',
-        intensity: 'High',
-        exercises: [
-          { icon:'🏋️', name:'Barbell Bench Press',    detail:'Compound · Chest Primary',  sets:'4×8',  reps:'8 reps', progress: 85 },
-          { icon:'💪', name:'Incline Dumbbell Press', detail:'Compound · Upper Chest',     sets:'3×10', reps:'10 reps', progress: 70 },
-          { icon:'🔵', name:'Cable Flyes',            detail:'Isolation · Chest Stretch',  sets:'3×12', reps:'12 reps', progress: 60 },
-          { icon:'⬇️', name:'Tricep Dips',            detail:'Compound · Tricep Primary',  sets:'3×12', reps:'12 reps', progress: 75 },
-          { icon:'🔻', name:'Skull Crushers',         detail:'Isolation · Long Head',      sets:'3×10', reps:'10 reps', progress: 65 },
-          { icon:'🤸', name:'Push-Ups (Burnout)',     detail:'Bodyweight · To Failure',    sets:'2×F',  reps:'To fail', progress: 50 },
-        ]
-      },
-      tuesday: {
-        title: 'Tuesday — Back & Biceps',
-        type: '💪 Strength',
-        duration: '65 min',
-        intensity: 'High',
-        exercises: [
-          { icon:'🏋️', name:'Deadlift',             detail:'Compound · Full Posterior',   sets:'4×5',  reps:'5 reps',  progress: 90 },
-          { icon:'⬆️', name:'Pull-Ups',             detail:'Compound · Lat Primary',      sets:'4×8',  reps:'8 reps',  progress: 75 },
-          { icon:'🔵', name:'Seated Cable Row',     detail:'Compound · Mid Back',         sets:'3×10', reps:'10 reps', progress: 70 },
-          { icon:'💪', name:'Lat Pulldown',         detail:'Isolation · Lats',            sets:'3×12', reps:'12 reps', progress: 65 },
-          { icon:'🔷', name:'Barbell Curl',         detail:'Isolation · Bicep Peak',      sets:'3×10', reps:'10 reps', progress: 60 },
-          { icon:'🔶', name:'Hammer Curl',          detail:'Isolation · Brachialis',      sets:'3×12', reps:'12 reps', progress: 55 },
-        ]
-      },
-      wednesday: {
-        title: 'Wednesday — Legs & Glutes',
-        type: '🦵 Leg Day',
-        duration: '70 min',
-        intensity: 'Very High',
-        exercises: [
-          { icon:'🏋️', name:'Barbell Back Squat',   detail:'Compound · Quad Primary',     sets:'4×8',  reps:'8 reps',  progress: 88 },
-          { icon:'🦵', name:'Romanian Deadlift',    detail:'Compound · Hamstring Focus',  sets:'4×10', reps:'10 reps', progress: 72 },
-          { icon:'🔵', name:'Leg Press',            detail:'Compound · Quad & Glute',     sets:'3×12', reps:'12 reps', progress: 78 },
-          { icon:'⬆️', name:'Walking Lunges',       detail:'Unilateral · Balance + Glute',sets:'3×20', reps:'20 steps',progress: 60 },
-          { icon:'💥', name:'Leg Extension',        detail:'Isolation · Terminal Quad',   sets:'3×15', reps:'15 reps', progress: 50 },
-          { icon:'🔻', name:'Standing Calf Raise',  detail:'Isolation · Gastrocnemius',   sets:'4×20', reps:'20 reps', progress: 65 },
-        ]
-      },
-      thursday: { rest: true },
-      friday: {
-        title: 'Friday — Shoulders & Abs',
-        type: '💪 Strength',
-        duration: '55 min',
-        intensity: 'Medium',
-        exercises: [
-          { icon:'🏋️', name:'Overhead Press',       detail:'Compound · Full Deltoid',     sets:'4×8',  reps:'8 reps',  progress: 80 },
-          { icon:'🔵', name:'Lateral Raises',       detail:'Isolation · Side Delts',      sets:'4×15', reps:'15 reps', progress: 60 },
-          { icon:'⬆️', name:'Front Raises',         detail:'Isolation · Front Delts',     sets:'3×12', reps:'12 reps', progress: 55 },
-          { icon:'🔷', name:'Face Pulls',           detail:'Isolation · Rear Delt & RC',  sets:'4×15', reps:'15 reps', progress: 65 },
-          { icon:'💥', name:'Plank Hold',           detail:'Core · Stability',            sets:'3×60s','reps':'60 sec', progress: 70 },
-          { icon:'🔻', name:'Cable Crunches',       detail:'Isolation · Rectus Abdominis',sets:'3×15', reps:'15 reps', progress: 60 },
-        ]
-      },
-      saturday: {
-        title: 'Saturday — HIIT & Cardio',
-        type: '⚡ HIIT',
-        duration: '30 min',
-        intensity: 'Max',
-        exercises: [
-          { icon:'🏃', name:'Jumping Jacks Warm-Up',detail:'Cardio · 3 min warm-up',      sets:'1×3m', reps:'3 min',  progress: 100 },
-          { icon:'💥', name:'Burpees',              detail:'Full Body · Max Effort',       sets:'6×30s','reps':'30 sec',progress: 90 },
-          { icon:'🦘', name:'Box Jumps',            detail:'Explosive · Plyometric',       sets:'5×10', reps:'10 reps',progress: 80 },
-          { icon:'🏃', name:'Sprint Intervals',     detail:'Cardio · 80m Sprints',         sets:'8×80m','reps':'80 m',  progress: 85 },
-          { icon:'🔵', name:'Mountain Climbers',    detail:'Core + Cardio · Dynamic',      sets:'4×45s','reps':'45 sec',progress: 75 },
-          { icon:'🧘', name:'Cool Down Stretch',    detail:'Flexibility · 5 min',          sets:'1×5m', reps:'5 min',  progress: 100 },
-        ]
-      },
-      sunday: { rest: true }
+    const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    const DAYS_SHORT = ['Su','Mo','Tu','We','Th','Fr','Sa'];
+    const DAYS_FULL  = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+    const WORKOUTS_BY_DOW = {
+      1: { title:'Monday — Chest & Triceps', type:'💪 Strength', duration:'60 min', intensity:'High',
+           exercises:[
+            {icon:'🏋️',name:'Barbell Bench Press',detail:'Compound · Chest Primary',sets:'4×8',reps:'8 reps',progress:85},
+            {icon:'💪',name:'Incline Dumbbell Press',detail:'Compound · Upper Chest',sets:'3×10',reps:'10 reps',progress:70},
+            {icon:'🔵',name:'Cable Flyes',detail:'Isolation · Chest Stretch',sets:'3×12',reps:'12 reps',progress:60},
+            {icon:'⬇️',name:'Tricep Dips',detail:'Compound · Tricep Primary',sets:'3×12',reps:'12 reps',progress:75},
+            {icon:'🔻',name:'Skull Crushers',detail:'Isolation · Long Head',sets:'3×10',reps:'10 reps',progress:65},
+            {icon:'🤸',name:'Push-Ups Burnout',detail:'Bodyweight · To Failure',sets:'2×F',reps:'To fail',progress:50}]},
+      2: { title:'Tuesday — Back & Biceps', type:'💪 Strength', duration:'65 min', intensity:'High',
+           exercises:[
+            {icon:'🏋️',name:'Deadlift',detail:'Compound · Full Posterior',sets:'4×5',reps:'5 reps',progress:90},
+            {icon:'⬆️',name:'Pull-Ups',detail:'Compound · Lat Primary',sets:'4×8',reps:'8 reps',progress:75},
+            {icon:'🔵',name:'Seated Cable Row',detail:'Compound · Mid Back',sets:'3×10',reps:'10 reps',progress:70},
+            {icon:'💪',name:'Lat Pulldown',detail:'Isolation · Lats',sets:'3×12',reps:'12 reps',progress:65},
+            {icon:'🔷',name:'Barbell Curl',detail:'Isolation · Bicep Peak',sets:'3×10',reps:'10 reps',progress:60},
+            {icon:'🔶',name:'Hammer Curl',detail:'Isolation · Brachialis',sets:'3×12',reps:'12 reps',progress:55}]},
+      3: { title:'Wednesday — Legs & Glutes', type:'🦵 Leg Day', duration:'70 min', intensity:'Very High',
+           exercises:[
+            {icon:'🏋️',name:'Barbell Back Squat',detail:'Compound · Quad Primary',sets:'4×8',reps:'8 reps',progress:88},
+            {icon:'🦵',name:'Romanian Deadlift',detail:'Compound · Hamstring Focus',sets:'4×10',reps:'10 reps',progress:72},
+            {icon:'🔵',name:'Leg Press',detail:'Compound · Quad & Glute',sets:'3×12',reps:'12 reps',progress:78},
+            {icon:'⬆️',name:'Walking Lunges',detail:'Unilateral · Balance + Glute',sets:'3×20',reps:'20 steps',progress:60},
+            {icon:'💥',name:'Leg Extension',detail:'Isolation · Terminal Quad',sets:'3×15',reps:'15 reps',progress:50},
+            {icon:'🔻',name:'Standing Calf Raise',detail:'Isolation · Gastrocnemius',sets:'4×20',reps:'20 reps',progress:65}]},
+      4: { title:'Thursday — Shoulders & Abs', type:'💪 Strength', duration:'55 min', intensity:'Medium',
+           exercises:[
+            {icon:'🏋️',name:'Overhead Press',detail:'Compound · Full Deltoid',sets:'4×8',reps:'8 reps',progress:80},
+            {icon:'🔵',name:'Lateral Raises',detail:'Isolation · Side Delts',sets:'4×15',reps:'15 reps',progress:60},
+            {icon:'⬆️',name:'Front Raises',detail:'Isolation · Front Delts',sets:'3×12',reps:'12 reps',progress:55},
+            {icon:'🔷',name:'Face Pulls',detail:'Isolation · Rear Delt',sets:'4×15',reps:'15 reps',progress:65},
+            {icon:'💥',name:'Plank Hold',detail:'Core · Stability',sets:'3×60s',reps:'60 sec',progress:70},
+            {icon:'🔻',name:'Cable Crunches',detail:'Isolation · Rectus Abdominis',sets:'3×15',reps:'15 reps',progress:60}]},
+      5: { title:'Friday — HIIT & Cardio', type:'⚡ HIIT', duration:'30 min', intensity:'Max',
+           exercises:[
+            {icon:'🏃',name:'Jumping Jacks Warm-Up',detail:'Cardio · 3 min',sets:'1×3m',reps:'3 min',progress:100},
+            {icon:'💥',name:'Burpees',detail:'Full Body · Max Effort',sets:'6×30s',reps:'30 sec',progress:90},
+            {icon:'🦘',name:'Box Jumps',detail:'Explosive · Plyometric',sets:'5×10',reps:'10 reps',progress:80},
+            {icon:'🏃',name:'Sprint Intervals',detail:'Cardio · 80m Sprints',sets:'8×80m',reps:'80 m',progress:85},
+            {icon:'🔵',name:'Mountain Climbers',detail:'Core + Cardio · Dynamic',sets:'4×45s',reps:'45 sec',progress:75},
+            {icon:'🧘',name:'Cool Down Stretch',detail:'Flexibility · 5 min',sets:'1×5m',reps:'5 min',progress:100}]}
     };
 
-    let currentWeek = 1;
-    function changeWeek(dir) {
-      currentWeek = Math.max(1, Math.min(12, currentWeek + dir));
-      document.getElementById('weekLabel').textContent = `Week ${currentWeek} — Feb 2025`;
+    let restDays = new Set([6]); // Saturday default
+    let selectedMonth = new Date().getMonth();
+    const currentYear = new Date().getFullYear();
+    const today = new Date();
+
+    function toggleRestDay(el) {
+      const d = parseInt(el.dataset.day);
+      if (restDays.has(d)) { restDays.delete(d); el.classList.remove('rest-on'); }
+      else { restDays.add(d); el.classList.add('rest-on'); }
+      buildCalendar();
+      if (document.getElementById('monthSchedule').style.display !== 'none') selectMonth(selectedMonth);
     }
 
-    function switchDay(tab, day) {
-      document.querySelectorAll('.day-tab').forEach(t => t.classList.remove('active'));
-      tab.classList.add('active');
-      renderDay(day);
+    function buildCalendar() {
+      const container = document.getElementById('yearCalendar');
+      container.innerHTML = '';
+      for (let m = 0; m < 12; m++) {
+        const firstDay = new Date(currentYear, m, 1).getDay();
+        const daysInMonth = new Date(currentYear, m+1, 0).getDate();
+        let html = `<div class="cal-month${m===selectedMonth?' selected':''}" onclick="selectMonth(${m})">
+          <div class="cal-month-header">${MONTHS[m]}</div>
+          <div class="cal-grid">`;
+        DAYS_SHORT.forEach(d => { html += `<div class="cal-day-label">${d}</div>`; });
+        for (let i=0; i<firstDay; i++) html += `<div class="cal-day empty"></div>`;
+        for (let d=1; d<=daysInMonth; d++) {
+          const dow = (firstDay + d - 1) % 7;
+          const isToday = (m === today.getMonth() && d === today.getDate() && currentYear === today.getFullYear());
+          let cls = 'cal-day';
+          if (isToday) cls += ' today';
+          else if (restDays.has(dow)) cls += ' is-rest';
+          else cls += ' has-workout';
+          html += `<div class="${cls}">${d}</div>`;
+        }
+        html += `</div></div>`;
+        container.innerHTML += html;
+      }
     }
 
-    function renderDay(day) {
-      const content = document.getElementById('workoutContent');
-      const w = workouts[day];
-      if (w.rest) {
-        content.innerHTML = `
-          <div class="card rest-day-card">
-            <div class="rest-emoji">😴</div>
-            <h3 class="rest-title">Rest & Recovery Day</h3>
-            <p class="rest-text">Your muscles grow during rest. Today, focus on sleep, hydration, and light stretching. Optional: 20-min walk or yoga session.</p>
-          </div>`;
+    function selectMonth(m) {
+      selectedMonth = m;
+      buildCalendar();
+      const trainDays = 7 - restDays.size;
+      document.getElementById('sumDays').textContent = trainDays;
+      document.getElementById('selectedMonthLabel').textContent = `${MONTHS[m]} ${currentYear}`;
+      document.getElementById('weekBadge').textContent = `${trainDays} Training Days / Week`;
+      buildDayTabs();
+      document.getElementById('monthSchedule').style.display = 'block';
+      document.getElementById('monthSchedule').scrollIntoView({behavior:'smooth', block:'start'});
+    }
+
+    function buildDayTabs() {
+      const tabs = document.getElementById('dayTabs');
+      tabs.innerHTML = '';
+      let firstWorkoutDow = -1;
+      for (let dow=0; dow<7; dow++) {
+        const isRest = restDays.has(dow);
+        const tabEl = document.createElement('div');
+        tabEl.className = `day-tab${isRest?' rest-tab':''}`;
+        tabEl.innerHTML = `${DAYS_FULL[dow].substring(0,3)}<div class="day-tab-sub">${isRest?'Rest':'Train'}</div>`;
+        tabEl.onclick = () => { document.querySelectorAll('.day-tab').forEach(t=>t.classList.remove('active')); tabEl.classList.add('active'); renderDayContent(dow); };
+        tabs.appendChild(tabEl);
+        if (!isRest && firstWorkoutDow === -1) firstWorkoutDow = dow;
+      }
+      // Auto-select first workout day
+      const firstTab = tabs.children[firstWorkoutDow >= 0 ? firstWorkoutDow : 0];
+      firstTab.classList.add('active');
+      renderDayContent(firstWorkoutDow >= 0 ? firstWorkoutDow : 0);
+    }
+
+    // Map DOW to workout data (cycle through available workouts)
+    const WORKOUT_KEYS = [1,2,3,4,5];
+    function getWorkoutForDow(dow) {
+      const trainDows = [0,1,2,3,4,5,6].filter(d => !restDays.has(d));
+      const idx = trainDows.indexOf(dow);
+      return WORKOUTS_BY_DOW[WORKOUT_KEYS[idx % WORKOUT_KEYS.length]];
+    }
+
+    function renderDayContent(dow) {
+      const el = document.getElementById('dayContent');
+      if (restDays.has(dow)) {
+        el.innerHTML = `<div class="rest-day-card"><div class="rest-emoji">😴</div><h3 class="rest-title">Rest & Recovery Day</h3><p class="rest-text">Your muscles grow during rest. Focus on sleep, hydration, and light stretching.<br>Optional: 20-min walk or yoga.</p></div>`;
         return;
       }
-      let exerciseHtml = w.exercises.map(ex => `
-        <div class="card exercise-card">
-          <div class="ex-icon">${ex.icon}</div>
-          <div class="ex-info">
-            <div class="ex-name">${ex.name}</div>
-            <div class="ex-detail">${ex.detail}</div>
-            <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:${ex.progress}%"></div></div>
-          </div>
-          <div class="ex-sets">${ex.sets}<div class="ex-sets-sub">${ex.reps}</div></div>
-        </div>`).join('');
-      content.innerHTML = `
-        <div class="workout-header">
-          <h3 class="workout-day-title">${w.title}</h3>
-          <div class="workout-meta-row">
+      const w = getWorkoutForDow(dow);
+      el.innerHTML = `
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;flex-wrap:wrap;gap:0.75rem;">
+          <h3 style="font-size:1.6rem;margin:0;">${w.title}</h3>
+          <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
             <span class="badge badge-blue">${w.type}</span>
             <span class="badge badge-green">⏱ ${w.duration}</span>
             <span class="badge badge-orange">🔥 ${w.intensity}</span>
           </div>
         </div>
-        <div class="exercise-grid">${exerciseHtml}</div>`;
+        <div class="exercise-grid">${w.exercises.map(ex=>`
+          <div class="card exercise-card">
+            <div class="ex-icon">${ex.icon}</div>
+            <div class="ex-info">
+              <div class="ex-name">${ex.name}</div>
+              <div class="ex-detail">${ex.detail}</div>
+              <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:${ex.progress}%"></div></div>
+            </div>
+            <div class="ex-sets">${ex.sets}<div class="ex-sets-sub">${ex.reps}</div></div>
+          </div>`).join('')}
+        </div>`;
     }
 
-    // Init
-    renderDay('monday');
+    buildCalendar();
+    // Auto-open current month
+    selectMonth(today.getMonth());
   </script>
 </body>
 </html>
