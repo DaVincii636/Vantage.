@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -277,22 +277,19 @@
         <li><a href="pages/instructors.html" class="nav-link"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>Instructors</a></li>
         <li><a href="pages/packages.html" class="nav-link"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg>Packages</a></li>
         <li><a href="pages/workout-plan.html" class="nav-link"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>Workout Plan</a></li>
-        <li><a href="pages/payment.html" class="nav-link"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>Payment</a></li>
       </ul>
       <div class="nav-right">
         <a href="pages/login.html" class="btn btn-outline" style="padding:7px 16px;font-size:0.82rem;">Log In</a>
       </div>
     </div>
   </nav>
-  <!-- Mobile Bottom Nav -->
-  <nav class="mobile-bottom-nav">
-    <a href="index.html" class="mob-nav-item active"><svg viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg>Home</a>
-    <a href="pages/instructors.html" class="mob-nav-item"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>Coaches</a>
-    <a href="pages/packages.html" class="mob-nav-item"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg>Packages</a>
-    <a href="pages/workout-plan.html" class="mob-nav-item"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>Workout</a>
-    <a href="pages/payment.html" class="mob-nav-item"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>Payment</a>
-  </nav>
-
+  <header class="mobile-header">
+    <a href="index.html" class="mobile-header-brand">
+      <img src="Images/GVantage.png" alt="GymVantage Logo" style="height:30px;width:auto;">
+      <span>Gym<em>Vantage</em></span>
+    </a>
+    <a href="pages/login.html" class="mobile-header-login">Log In</a>
+  </header>
   <div class="page-wrapper">
     <!-- HERO -->
     <section class="hero">
@@ -312,7 +309,7 @@
       <div class="hero-visual">
         <div class="hero-bg-circle">
       <div class="hero-inner-circle">
-  <img src="Images/GVantage.png" alt="Vantage Logo" style="height:330px; width:330px; object-fit:contain;">
+  <img src="Images/GVantage.png" alt="Vantage Logo" style="height:240px; width:240px; object-fit:contain; max-width:100%; display:block;">
 </div>
         </div>
         <div class="hero-float-badge b1">

@@ -5,10 +5,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Login — GymVantage</title>
   <link rel="stylesheet" href="../css/style.css"/>
+  <style>
+    .auth-logo img { height: 80px; width: auto; display: block; margin: 0 auto; }
+    .phone-input-wrap { display:flex; gap:0; }
+    .phone-prefix { padding:12px 14px; background:var(--bg-secondary); border:1.5px solid var(--border); border-right:none; border-radius:var(--radius) 0 0 var(--radius); color:var(--text-secondary); font-size:0.95rem; font-weight:600; white-space:nowrap; display:flex; align-items:center; }
+    .phone-prefix+.form-control { border-radius:0 var(--radius) var(--radius) 0; }
+    .form-control.select-fix { width:100%; }
+    .confirm-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.8);backdrop-filter:blur(8px);z-index:3000;display:none;align-items:center;justify-content:center;padding:1rem;}
+    .confirm-overlay.open{display:flex;}
+    .confirm-box{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:2.5rem 2rem;max-width:360px;width:100%;text-align:center;animation:popIn 0.35s cubic-bezier(0.34,1.4,0.64,1);}
+    @keyframes popIn{from{opacity:0;transform:scale(0.92) translateY(20px);}to{opacity:1;transform:scale(1) translateY(0);}}
+    .confirm-icon{font-size:3.5rem;margin-bottom:1rem;}
+    .confirm-title{font-family:'Rajdhani',sans-serif;font-size:1.6rem;font-weight:700;margin-bottom:0.5rem;}
+    .confirm-text{color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1.75rem;}
+  </style>
 </head>
 <body>
-  <!-- NAVBAR -->
-    <nav class="navbar">
+  <nav class="navbar">
     <div class="floating-nav">
       <a href="../index.html" class="navbar-brand">
         <img src="../Images/GVantage.png" alt="GymVantage Logo" style="height:36px;">
@@ -19,29 +32,25 @@
         <li><a href="instructors.html" class="nav-link"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>Instructors</a></li>
         <li><a href="packages.html" class="nav-link"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg>Packages</a></li>
         <li><a href="workout-plan.html" class="nav-link"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>Workout Plan</a></li>
-        <li><a href="payment.html" class="nav-link"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>Payment</a></li>
       </ul>
       <div class="nav-right">
         <a href="login.html" class="btn btn-outline" style="padding:7px 16px;font-size:0.82rem;">Log In</a>
       </div>
     </div>
   </nav>
-  <!-- Mobile Bottom Nav -->
-  <nav class="mobile-bottom-nav">
-    <a href="../index.html" class="mob-nav-item"><svg viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg>Home</a>
-    <a href="instructors.html" class="mob-nav-item"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>Coaches</a>
-    <a href="packages.html" class="mob-nav-item"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg>Packages</a>
-    <a href="workout-plan.html" class="mob-nav-item"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>Workout</a>
-    <a href="payment.html" class="mob-nav-item"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>Payment</a>
-  </nav>
+  <header class="mobile-header">
+    <a href="../index.html" class="mobile-header-brand">
+      <img src="../Images/GVantage.png" alt="GymVantage Logo" style="height:30px;width:auto;">
+      <span>Gym<em>Vantage</em></span>
+    </a>
+    <a href="login.html" class="mobile-header-login">Log In</a>
+  </header>
 
-  <!-- LOGIN SECTION -->
   <div class="auth-wrapper">
     <div class="auth-card">
-      
       <div class="auth-header">
         <div class="auth-logo">
-          <img src="../Images/GVantage.png" alt="Vantage Logo" style="height:60px;">
+          <img src="../Images/GVantage.png" alt="GymVantage Logo">
         </div>
         <h2 class="auth-title">Welcome Back</h2>
         <p class="auth-subtitle">Login to your GymVantage account</p>
@@ -50,14 +59,12 @@
       <form onsubmit="handleLogin(event)">
         <div class="form-group">
           <label class="form-label">Email Address</label>
-          <input type="email" class="form-control" placeholder="you@example.com" required/>
+          <input type="email" class="form-control" id="loginEmail" placeholder="you@example.com" required/>
         </div>
-
         <div class="form-group">
           <label class="form-label">Password</label>
-          <input type="password" class="form-control" placeholder="Enter your password" required/>
+          <input type="password" class="form-control" id="loginPass" placeholder="Enter your password" required/>
         </div>
-
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;">
           <label style="display:flex;align-items:center;gap:8px;font-size:0.85rem;color:var(--text-secondary);cursor:pointer;">
             <input type="checkbox" style="accent-color:var(--blue-accent);">
@@ -65,19 +72,23 @@
           </label>
           <a href="#" style="font-size:0.85rem;color:var(--blue-light);">Forgot Password?</a>
         </div>
-
-        <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;padding:14px;">
-          Log In
-        </button>
+        <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;padding:14px;">Log In</button>
       </form>
 
       <div class="divider" style="margin:1.5rem 0;"></div>
-
       <p style="text-align:center;color:var(--text-secondary);font-size:0.9rem;">
-        Don't have an account?
-        <a href="register.html" style="color:var(--blue-light);font-weight:600;">Create Account</a>
+        Don't have an account? <a href="register.html" style="color:var(--blue-light);font-weight:600;">Create Account</a>
       </p>
+    </div>
+  </div>
 
+  <!-- Success Confirmation -->
+  <div class="confirm-overlay" id="loginConfirm">
+    <div class="confirm-box">
+      <div class="confirm-icon">✅</div>
+      <div class="confirm-title">Login Successful!</div>
+      <div class="confirm-text">Welcome back! Redirecting you to the home page...</div>
+      <button class="btn btn-primary" style="width:100%;justify-content:center;" onclick="window.location.href='../index.html'">Go to Home →</button>
     </div>
   </div>
 
@@ -85,12 +96,8 @@
   <script>
     function handleLogin(e) {
       e.preventDefault();
-      showToast('Login successful.', 'success');
-      setTimeout(() => {
-        window.location.href = '../index.html';
-      }, 1500);
+      document.getElementById('loginConfirm').classList.add('open');
     }
   </script>
-
 </body>
 </html>
